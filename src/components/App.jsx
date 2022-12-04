@@ -77,13 +77,14 @@ export class App extends React.Component {
   }
 
   render() {
-    const {images, query, page, totalNumberOfPages, currentImage,isLoading,error,Button} = this.state
+    const {images, query, page, totalNumberOfPages, currentImage,isLoading,} = this.state
     return (
       <>
         <SearchBar showPictures = {this.showPictures} query = {query} />
         <ImageGallery images={images} openModal={this.openModal} query={query }/>
         {currentImage && <Modal image={currentImage} closeModal={ this.closeModal}/>}
-        {!isLoading && !error && (<Button text='Load more' clickHandler={this.loadMore} />)}
+        {/* {!isLoading && !error && (<Button text='Load more' clickHandler={this.loadMore} />)} */}
+        {images.length > 0 && !isLoading && page < totalNumberOfPages &&(<Button text='Load more' clickHandler={this.loadMore} />)}
         {isLoading && <Loader />}
         <Modal query = {query} largeImageUrl = {currentImage} closeModal = {this.closeModal}/>
         </>
