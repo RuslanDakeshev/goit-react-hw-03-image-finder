@@ -1,7 +1,7 @@
 import { Component } from 'react';
 
 
-class Modal extends Component {
+export class Modal extends Component {
 
     componentDidMount() {
         window.addEventListener('keydown', this.closeByEsc)
@@ -34,4 +34,4 @@ class Modal extends Component {
   }
 }
 
-export default Modal;
+
