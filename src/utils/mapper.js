@@ -1,3 +1,5 @@
-export const picturesMapper = array => {
-  return array.map({ id, webformatURL, largeImageURL });
-};
+export const picturesMapper = array => 
+    array.map(({ id, webformatURL, largeImageURL })=> ({
+     id, webformatURL, largeImageURL 
+  }));
+
