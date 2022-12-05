@@ -1,7 +1,18 @@
-export const ImageGalleryItem = ({ id, webformatURL, largeImageURL}) => {
-    return (
-        <li key={id}>
-  <img src={webformatURL} alt={largeImageURL} />
-</li>
-    )
-}
+import PropTypes from 'prop-types';
+
+export const ImageGalleryItem = ({
+  query,
+  imageURL,
+  largeImageURL,
+  openModal,
+}) => (
+    <img src={imageURL} alt={query} onClick={() => {openModal(largeImageURL)} }/>
+  );
+
+
+ImageGalleryItem.propTypes = {
+  query: PropTypes.string.isRequired,
+  imageURL: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
+  openModal: PropTypes.func.isRequired,
+};

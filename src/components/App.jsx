@@ -1,5 +1,5 @@
-import React from 'react';
-import { fetchPictures } from 'services/picturesApi';
+import { Component } from 'react';
+import { fetchPictures, imagesOfPages } from 'services/picturesApi';
 import { picturesMapper } from 'utils/mapper';
 import { Loader } from './Loader/Loader';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -7,89 +7,132 @@ import { SearchBar } from './Searchbar/Searchbar';
 import { Button } from './Button/Button';
 import { Modal } from './Modal/Modal';
 
-
- 
-export class App extends React.Component {
+export class App extends Component {
   state = {
     query: '',
-    searchWord: '',
     images: [],
     page: 1,
-    totalHits: 0,
+    totalNumberOfPages: 0,
     isLoading: false,
     error: null,
-    isShown: false,
     currentImage: null,
-    totalNumberOfPages: 0,
     modalShown: false,
+    searchDone: false,
   };
 
   componentDidUpdate(_, prevState) {
-    const { isShown, page, totalNumberOfPages } = this.state
-    if ((isShown && isShown !== prevState.isShown) || (isShown && page !== prevState.page)) {
-      this.getPictures()
+    const { page, totalNumberOfPages, searchDone } = this.state;
+    if (searchDone !== prevState.searchDone || page !== prevState.page) {
+      this.getPictures();
+      
     }
     //  if (!isShown && isShown !== prevState.isShown) {
     //    this.setState({ totalNumberOfPages: 1 })
     // }
 
     if (page === totalNumberOfPages) {
-       this.setState({ totalNumberOfPages: 1 })
+      this.setState({ totalNumberOfPages: 0 });
     }
-}
-
-  getPictures = () => {
-    const { page, searchWord } = this.state
-    this.setState({ isLoading: true });
-
-    fetchPictures(page,searchWord).then(({data:{totalHits}}) => {
-      this.setState(prevState =>({
-        images: [...prevState.images, ...picturesMapper(totalHits)],
-        error: ''
-      }))
-    }).catch(error => {
-      this.setState({error: error.message, isShown:false})
-    }).finally(()=> this.setState({isLoading: false}))
   }
 
-  showPictures = () => {
+  // getPictures = () => {
+  //   const { page, searchWord } = this.state;
+  //   this.setState({ isLoading: true });
+
+  //   fetchPictures(page, searchWord)
+  //     .then(({ data: { totalHits } }) => {
+  //       this.setState(prevState => ({
+  //         images: [...prevState.images, ...picturesMapper(totalHits)],
+  //         error: '',
+  //       }));
+  //     })
+  //     .catch(error => {
+  //       this.setState({ error: error.message, isShown: false });
+  //     })
+  //     .finally(() => this.setState({ isLoading: false }));
+  // };
+
+  getPictures = async () => {
+    const { page, query } = this.state;
+    this.setState({ isLoading: true });
+
+    const arrayOfImages = await fetchPictures(page, query)
+    const filteredArray = picturesMapper(arrayOfImages);
+    if (filteredArray.length === 0) {
+      this.setState({ isLoading: false })
+      return alert('Upsssss...')
+    }
+
+    this.setState({ totalNumberOfPages: imagesOfPages });
+
+    this.setState(prevState => ({
+      images: [...prevState.images, ...filteredArray],
+      error: '',
+    }));
+    this.setState({ isLoading: false });
+
+
+      
+  };
+
+  handleInputChange(newQuery) {
+    const searchQuery = newQuery.trim();
+    this.setState({ query: searchQuery });
+  }
+
+  showPictures = query => {
     this.setState(prevState => ({
       searchDone: !prevState.searchDone,
-      pictures: [],
+      images: [],
       searchWord: prevState.query,
-      query: '',
+      query,
       page: 1,
     }));
   };
 
   openModal = data => {
-    this.setState({ currentImage: data, modalShown:true})
+    this.setState({ currentImage: data, modalShown: true });
   };
 
   closeModal = () => {
-    this.setState({ currentImage: null})
-  }
+    this.setState({ currentImage: null });
+  };
 
   loadMore = () => {
     this.setState(prevState => ({
-      page: prevState.page + 1
-    }))
-  }
+      page: prevState.page + 1,
+    }));
+  };
+
+  
 
   render() {
-    const {images, query, page, totalNumberOfPages, currentImage,isLoading,} = this.state
+    const { images, query, page, totalNumberOfPages, currentImage, isLoading } =
+      this.state;
     return (
       <>
-        <SearchBar showPictures = {this.showPictures} query = {query} />
-        <ImageGallery images={images} openModal={this.openModal} query={query }/>
-        {currentImage && <Modal image={currentImage} closeModal={ this.closeModal}/>}
-        {/* {!isLoading && !error && (<Button text='Load more' clickHandler={this.loadMore} />)} */}
-        {images.length > 0 && !isLoading && page < totalNumberOfPages &&(<Button text='Load more' clickHandler={this.loadMore} />)}
+        <SearchBar showPictures={this.showPictures} query={query} handleInputChange = {this.handleInputChange} />
+        {images.length > 0 && (<ImageGallery
+          images={images}
+          openModal={this.openModal}
+          query={query}
+        />)}
         {isLoading && <Loader />}
-        <Modal query = {query} largeImageUrl = {currentImage} closeModal = {this.closeModal}/>
-        </>
-   )
- }
-
-
+        {/* {currentImage && (
+          <Modal image={currentImage} closeModal={this.closeModal} />
+        )} */}
+        {/* {!isLoading && !error && (<Button text='Load more' clickHandler={this.loadMore} />)} */}
+        {images.length > 0 && !isLoading && page < totalNumberOfPages && (
+          <Button text="Load more" loadMore={this.loadMore} />
+        )}
+        
+        {currentImage && (
+          <Modal
+            query={query}
+            largeImageUrl={currentImage}
+            closeModal={this.closeModal}
+          />)}
+      </>
+    );
+  }
 }

@@ -4,46 +4,49 @@ import PropTypes from 'prop-types';
 export class SearchBar extends Component {
 
     state = {
-        query: '',
-        page: 1
+        query: ''
+        
     }
 
     searchQueryChange = e => {
-        this.setState({query: e.currentTarget.value.toLowerCase()})
+        this.setState({query: e.target.value.toLowerCase()})
     }
 
     handleSubmit = e => {
         e.preventDefault()
 
         const { query } = this.state;
-        const { onSubmit } = this.props;
+        // const { onSubmit } = this.props;
 
         if (query.trim() === '') {
             alert('Please enter a search value');
             return
         }
 
-        onSubmit(query)
+        this.props.showPictures(query);
+        this.setState({query: ''})
+
+        // onSubmit(query)
         
     }
 
     render() {
-        const { query } = this.state
+        
         
         return (
-            <header class="searchbar">
-  <form class="form" onSubmit = {this.handleSubmit}>
-    <button type="submit" class="button">
-      <span class="button-label">Search</span>
+            <header>
+  <form onSubmit = {this.handleSubmit}>
+    <button type="submit">
+      <span >Search</span>
     </button>
 
                     <input
                         onChange={this.searchQueryChange}
-            value={query}
-      class="input"
+            value={this.state.query}
+      
       type="text"
-      autocomplete="off"
-      autofocus
+      autoComplete="off"
+      autoFocus
       placeholder="Search images and photos"
     />
   </form>
@@ -53,4 +56,4 @@ export class SearchBar extends Component {
 
 }
 
-SearchBar.propTypes = { onSubmit: PropTypes.func.isRequired };
+SearchBar.propTypes = { showPictures: PropTypes.func.isRequired };
