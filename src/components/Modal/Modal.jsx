@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { Overlay, ModalViewer, ModalImg, CloseBtn } from './Modal.styled';
 import PropTypes from 'prop-types';
 
 
@@ -26,12 +27,13 @@ export class Modal extends Component {
     }
   render() {
    return (
-      <div onClick={this.closeByBackdrop}>
-        <div>
-          <button type='button' onClick={()=>this.props.closeModal()}>Close</button>
-          <img src={this.props.largeImageUrl} alt={this.props.query} />
-        </div>
-      </div>
+      <Overlay onClick={this.closeByBackdrop}>
+        <ModalViewer>
+          <CloseBtn type='button' onClick={()=>this.props.closeModal()}>Close</CloseBtn>
+          <ModalImg src={this.props.largeImageUrl} alt={this.props.query} />
+        </ModalViewer>
+           </Overlay>
+          
     );
   }
 }

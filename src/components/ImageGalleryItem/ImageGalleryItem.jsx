@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { GalleryItem, Image } from './ImageGalleryItem.styled';
 
 export const ImageGalleryItem = ({
   query,
@@ -6,7 +7,9 @@ export const ImageGalleryItem = ({
   largeImageURL,
   openModal,
 }) => (
-    <img src={imageURL} alt={query} onClick={() => {openModal(largeImageURL)} }/>
+    <GalleryItem>
+        <Image src={imageURL} alt={query} onClick={() => { openModal(largeImageURL) }} />
+        </GalleryItem>
   );
 
 
