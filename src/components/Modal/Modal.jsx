@@ -29,7 +29,7 @@ export class Modal extends Component {
    return (
       <Overlay onClick={this.closeByBackdrop}>
         <ModalViewer>
-          <CloseBtn type='button' onClick={()=>this.props.closeModal()}>Close</CloseBtn>
+          {/* <CloseBtn type='button' onClick={()=>this.props.closeModal()}>Close</CloseBtn> */}
           <ModalImg src={this.props.largeImageUrl} alt={this.props.query} />
         </ModalViewer>
            </Overlay>

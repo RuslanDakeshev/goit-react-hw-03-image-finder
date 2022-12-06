@@ -53,14 +53,14 @@ export class App extends Component {
   // };
 
   getPictures = async () => {
-    const { page, query } = this.state;
+    const {query, page} = this.state;
     this.setState({ isLoading: true });
 
     const arrayOfImages = await fetchPictures(page, query)
     const filteredArray = picturesMapper(arrayOfImages);
     if (filteredArray.length === 0) {
       this.setState({ isLoading: false })
-      return alert('Upsssss...')
+      return alert('Oops! Something went wrong!')
     }
 
     this.setState({ totalNumberOfPages: imagesOfPages });
@@ -107,7 +107,7 @@ export class App extends Component {
   
 
   render() {
-    const { images, query, page, totalNumberOfPages, currentImage, isLoading } =
+    const { images, query, isLoading, page, totalNumberOfPages, currentImage } =
       this.state;
     return (
       <>
@@ -116,8 +116,9 @@ export class App extends Component {
           images={images}
           openModal={this.openModal}
           query={query}
-        />)}
-        {isLoading && <Loader />}
+        />
+        )}
+        {isLoading && <Loader/>}
         {/* {currentImage && (
           <Modal image={currentImage} closeModal={this.closeModal} />
         )} */}

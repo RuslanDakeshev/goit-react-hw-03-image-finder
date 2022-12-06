@@ -34,7 +34,7 @@ export const ImageGallery = ({ images,query, openModal }) => {
 };
 
 ImageGallery.propTypes = {
-  pictures: PropTypes.arrayOf(
+  images: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       webformatURL: PropTypes.string.isRequired,
