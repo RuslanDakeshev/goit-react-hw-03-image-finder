@@ -6,6 +6,9 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { SearchBar } from './Searchbar/Searchbar';
 import { Button } from './Button/Button';
 import { Modal } from './Modal/Modal';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 export class App extends Component {
   state = {
@@ -60,7 +63,7 @@ export class App extends Component {
     const filteredArray = picturesMapper(arrayOfImages);
     if (filteredArray.length === 0) {
       this.setState({ isLoading: false })
-      return alert('Oops! Something went wrong!')
+      return toast.error('Oops! Something went wrong!')
     }
 
     this.setState({ totalNumberOfPages: imagesOfPages });
@@ -133,6 +136,7 @@ export class App extends Component {
             largeImageUrl={currentImage}
             closeModal={this.closeModal}
           />)}
+        <ToastContainer autoClose={2000} />
       </>
     );
   }

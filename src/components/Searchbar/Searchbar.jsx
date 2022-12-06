@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Header, SearchForm, Input, ButtonSubmit } from './Searchbar.styled';
+import { toast } from 'react-toastify';
 
 export class SearchBar extends Component {
 
@@ -20,7 +21,7 @@ export class SearchBar extends Component {
         // const { onSubmit } = this.props;
 
         if (query.trim() === '') {
-            alert('Please enter a search value');
+            toast.error('Please enter a search value');
             return
         }
 
