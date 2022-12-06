@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Overlay, ModalViewer, ModalImg} from './Modal.styled';
+import { Overlay, ModalViewer, ModalImg} from './Modal.styled'; // добавить CloseBtn
 import PropTypes from 'prop-types';
 
 
